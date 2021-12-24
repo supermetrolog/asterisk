@@ -17,7 +17,7 @@ Thumbs.db
 
 #config
 /config/db.php
-/config/asterisk_ami.php
+#/config/asterisk_ami.php
 
 # composer itself is not needed
 composer.phar
