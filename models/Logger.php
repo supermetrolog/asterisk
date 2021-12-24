@@ -18,7 +18,7 @@ class Logger extends Model
         if ($this->filepath) {
             return false;
         }
-        echo "Logger: [$this->i]\n";
+        // echo "Logger: [$this->i]\n";
         print_r($message);
         echo "\n";
         $this->i++;

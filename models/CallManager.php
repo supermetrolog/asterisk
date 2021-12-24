@@ -2,6 +2,9 @@
 
 namespace app\models;
 
+use app\models\AsteriskEvents\EventDialBegin;
+use app\models\AsteriskEvents\EventDialBeginHandler;
+use app\models\AsteriskEvents\EventDialEnd;
 use Exception;
 use yii\base\Model;
 use PAMI\Client\Impl\ClientImpl as PamiClient;
@@ -43,48 +46,15 @@ class CallManager extends Model
                 $this->logger->notice("{$event->getName()} -> Открыт канал для звонка на номер:  {$data['calleridnum']}({$data['calleridname']})");
                 break;
             case 'DialBegin':
-                if ($data['destcalleridnum']) {
-                    $data['calleridnum'] = $data['destcalleridnum'];
-                    $data['calleridname'] = $data['destcalleridname'];
-                    $data['connectedlinenum'] = $data['destconnectedlinenum'];
-                    $data['connectedlinename'] = $data['destconnectedlinename'];
-                }
-                $this->logger->notice("{$event->getName()} -> Начало звонка на номер : {$data['calleridnum']}({$data['calleridname']}) с номера: {$data['connectedlinenum']}({$data['connectedlinename']})");
+                EventDialBegin::handler($event)->run();
                 break;
             case 'DialEnd':
-                if ($data['destcalleridnum']) {
-                    $data['calleridnum'] = $data['destcalleridnum'];
-                    $data['calleridname'] = $data['destcalleridname'];
-                    $data['connectedlinenum'] = $data['destconnectedlinenum'];
-                    $data['connectedlinename'] = $data['destconnectedlinename'];
-                }
-                $this->logger->notice("{$event->getName()} -> Конец звонка на номер : {$data['calleridnum']}({$data['calleridname']}) с номера: {$data['connectedlinenum']}({$data['connectedlinename']})");
-                switch ($data['dialstatus']) {
-                    case 'ANSWER':
-                        $this->logger->notice("Абонент -> {$data['calleridnum']}({$data['calleridname']}) взял трубку!");
-                        break;
-                    case 'BUSY':
-                        $this->logger->notice("Абонент -> {$data['calleridnum']}({$data['calleridname']}) сбросил вызов!");
-                        break;
-                    default:
-                        $this->logger->notice("Статус -> {$data['dialstatus']}");
-
-                        break;
-                }
+                EventDialEnd::handler($event)->run();
                 break;
             default:
-                # code...
+                // $this->logger->notice($event->getName());
                 break;
         }
-        // if (
-        //     $event->getName() == 'DialBegin' || $event->getName() == 'DialEnd' ||
-        //     $event->getName() == 'Newchannel'
-        // ) {
-        //     $this->logger->notice($event);
-        // }
-        // if ($event->getName() != 'VarSet' && $event->getName() != 'Newexten') {
-        //     $this->logger->notice($event);
-        // }
     }
 
     public function call($options = null)
