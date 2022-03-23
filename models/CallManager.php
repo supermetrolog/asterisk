@@ -40,7 +40,6 @@ class CallManager extends Model
     private function eventListenerHandle(EventMessage $event)
     {
         $data = $event->getKeys();
-
         switch ($event->getName()) {
             case 'Newchannel':
                 $this->logger->notice("{$event->getName()} -> Открыт канал для звонка на номер:  {$data['calleridnum']}({$data['calleridname']})");
@@ -50,6 +49,10 @@ class CallManager extends Model
                 break;
             case 'DialEnd':
                 EventDialEnd::handler($event)->run();
+                break;
+            case 'Hangup':
+                $fuck = json_encode($event->getName());
+                $this->logger->notice("Hangup -> $fuck");
                 break;
             default:
                 // $this->logger->notice($event->getName());

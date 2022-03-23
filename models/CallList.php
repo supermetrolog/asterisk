@@ -23,6 +23,13 @@ class CallList extends \yii\db\ActiveRecord
 {
     public const TYPE_OUTGOING = 0;
     public const TYPE_INCOMING = 1;
+
+    public const FETCHED_STATUS = 0;
+    public const NO_FETCHED_STATUS = -1;
+    public const VIEWED_STATUS = 1;
+    public const NO_VIEWED_STATUS = 0;
+    public const PROCESSED_STATUS = 2;
+    public const NO_COUNT_STATUS = 3;
     /**
      * {@inheritdoc}
      */
@@ -38,9 +45,9 @@ class CallList extends \yii\db\ActiveRecord
     {
         return [
             [['caller_id', 'from', 'to', 'type'], 'required'],
-            [['type', 'viewed'], 'integer'],
-            [['created_at'], 'safe'],
-            [['caller_id', 'from', 'to', 'status', 'uniqueid'], 'string', 'max' => 255],
+            [['type', 'status'], 'integer'],
+            [['created_at', 'updated_at', 'hangup_timestamp'], 'safe'],
+            [['caller_id', 'from', 'to', 'call_ended_status', 'uniqueid'], 'string', 'max' => 255],
             [['caller_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserProfile::className(), 'targetAttribute' => ['caller_id' => 'caller_id']],
         ];
     }
@@ -62,7 +69,6 @@ class CallList extends \yii\db\ActiveRecord
             'viewed' => 'Viewed',
         ];
     }
-
     /**
      * Gets query for [[Caller]].
      *

@@ -18,7 +18,7 @@ abstract class AbstractEvent extends Model
         if (!Yii::$app->db->isActive) {
             Yii::$app->db->open();
         }
-        echo "\n\nDB isActive: " . Yii::$app->db->isActive . "\n\n";
+        // echo "\n\nDB isActive: " . Yii::$app->db->isActive . "\n\n";
     }
     abstract public function run();
     public static function handler(EventMessage $event)

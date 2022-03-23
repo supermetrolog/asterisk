@@ -40,7 +40,8 @@ class EventDialBegin extends AbstractEvent
             'from' => $from,
             'to' => $to,
             'type' => $type,
-            'uniqueid' => $uniqueid
+            'uniqueid' => $uniqueid,
+            'status' => CallList::NO_FETCHED_STATUS
         ];
         $model = new CallList($options);
         if ($model->save()) {

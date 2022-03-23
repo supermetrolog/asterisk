@@ -46,7 +46,7 @@ class EventDialEnd extends AbstractEvent
     {
         $models = CallList::find()->where(['uniqueid' => $uniqueid])->all();
         foreach ($models as $model) {
-            $model->status = $status;
+            $model->call_ended_status = $status;
             if ($model->save()) {
                 $this->logger->notice('Информация о звонке сохранена');
             } else {
